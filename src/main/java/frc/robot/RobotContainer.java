@@ -32,8 +32,17 @@ public class RobotContainer {
         m_TankBase.driveCommand(
             () -> baseVelY.getAsDouble() * 0.5, () -> baseVelX.getAsDouble() * 0.5));
 
-    m_driverController.rightBumper().onTrue(m_ArmSubsystem.armDownCommand()).onFalse(m_ArmSubsystem.armUpCommand());
-    m_driverController.leftBumper().onTrue(m_GripperSubsystem.gripperCloseCommand()).onFalse(m_GripperSubsystem.gripperOpenCommand());
-    m_driverController.axisGreaterThan(3, 0.5).onTrue(m_RollerSubsystem.rollerForwardCommand()).onFalse(m_RollerSubsystem.rollerBackwardCommand());
+    m_driverController
+        .rightBumper()
+        .onTrue(m_ArmSubsystem.armDownCommand())
+        .onFalse(m_ArmSubsystem.armUpCommand());
+    m_driverController
+        .leftBumper()
+        .onTrue(m_GripperSubsystem.gripperCloseCommand())
+        .onFalse(m_GripperSubsystem.gripperOpenCommand());
+    m_driverController
+        .axisGreaterThan(3, 0.5)
+        .onTrue(m_RollerSubsystem.rollerForwardCommand())
+        .onFalse(m_RollerSubsystem.rollerBackwardCommand());
   }
 }

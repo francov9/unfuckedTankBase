@@ -34,18 +34,18 @@ public class ArmSubsystem extends AdvancedSubsystem {
 
     armMotor.getConfigurator().apply(talonFXConfigs);
   }
+
   @Override
   public void periodic() {
     DogLog.log("Robot/ArmSubsystem/armMotorPosition", armMotor.getPosition().getValueAsDouble());
   }
 
   public Command armDownCommand() {
-    return run(
-        () -> armMotor.setControl(positionRequest.withPosition(kDownAngle))).withName("Down");
+    return run(() -> armMotor.setControl(positionRequest.withPosition(kDownAngle)))
+        .withName("Down");
   }
 
   public Command armUpCommand() {
-    return run(
-        () -> armMotor.setControl(positionRequest.withPosition(kUpAngle))).withName("Up");
+    return run(() -> armMotor.setControl(positionRequest.withPosition(kUpAngle))).withName("Up");
   }
 }

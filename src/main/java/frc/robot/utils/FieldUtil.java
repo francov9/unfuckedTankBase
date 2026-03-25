@@ -1,14 +1,8 @@
 package frc.robot.utils;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-
-import edu.wpi.first.math.InterpolatingMatrixTreeMap;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -19,10 +13,10 @@ public class FieldUtil {
   private static final int maxIter = 10;
   private static final LinearVelocity projectileHorizontalVelocity = MetersPerSecond.of(100000000);
   private static final double E_tolerance = 0.1;
-  private static final double dT_dt_tolerance =
-      SwerveConstants.driverTranslationalShootingVelocity.in(MetersPerSecond)
-          * Math.cos(Math.toRadians(20)) // min overlap angle at worst-case robot velocity
-          / projectileHorizontalVelocity.in(MetersPerSecond);
+  // private static final double dT_dt_tolerance =
+  //     SwerveConstants.driverTranslationalShootingVelocity.in(MetersPerSecond)
+  //         * Math.cos(Math.toRadians(20)) // min overlap angle at worst-case robot velocity
+  //         / projectileHorizontalVelocity.in(MetersPerSecond);
 
   private static double prevSwitchTime = 110; // starts at first transition shift
 

@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Hertz;
-import static edu.wpi.first.units.Units.Volts;
+import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -9,12 +8,15 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
+import static edu.wpi.first.units.Units.Hertz;
+import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -24,7 +26,6 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.AdvancedSubsystem;
 import frc.robot.Robot;
-import java.util.function.DoubleSupplier;
 
 public class TankBase extends AdvancedSubsystem {
   private final CANBus rio = new CANBus("rio");
@@ -50,7 +51,7 @@ public class TankBase extends AdvancedSubsystem {
 
   private Notifier _simNotifier;
 
-  //@Logged(name = "Pose")
+  // @Logged(name = "Pose")
   public Pose2d pose = new Pose2d();
 
   // We ONLY need DifferentialDrivetrainSim. DCMotorSim only need for one motor sim
@@ -95,7 +96,7 @@ public class TankBase extends AdvancedSubsystem {
     }
   }
 
-    // Helper methods for math conversions
+  // Helper methods for math conversions
   private double rotationsToMeters(double rotations) {
     return rotations * (2 * Math.PI * kWheelRadiusMeters) / kGearRatio;
   }
@@ -110,7 +111,8 @@ public class TankBase extends AdvancedSubsystem {
   }
 
   public Command driveCommand(DoubleSupplier speed, DoubleSupplier turn) {
-    return run(() -> m_drive.arcadeDrive(speed.getAsDouble(), turn.getAsDouble())).withName("Drive");
+    return run(() -> m_drive.arcadeDrive(speed.getAsDouble(), turn.getAsDouble()))
+        .withName("Drive");
   }
 
   public Command brake() {
@@ -126,10 +128,9 @@ public class TankBase extends AdvancedSubsystem {
         rotationsToMeters(rMotor.getPosition().getValueAsDouble()));
     pose = m_odometry.getPoseMeters();
     DogLog.log("TankBase/Position", pose);
-    //DogLog.log("TankBase/CurrentComma", driving);
+    // DogLog.log("TankBase/CurrentComma", driving);
     super.periodic();
   }
-
 
   private void startSimThread() {
     _simNotifier =

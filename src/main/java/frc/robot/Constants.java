@@ -1,7 +1,6 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -14,6 +13,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.utils.VisionPoseEstimator.VisionPoseEstimatorConstants;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -23,11 +23,14 @@ import frc.robot.utils.VisionPoseEstimator.VisionPoseEstimatorConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
   public static class OperatorConstants {
+
     public static final int kDriverControllerPort = 0;
   }
 
-    public static class FieldConstants {
+  public static class FieldConstants {
+
     public static final AprilTagFieldLayout tagLayout =
         AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
@@ -62,7 +65,6 @@ public final class Constants {
 
     // uncomment if using the test tag layout
     // public static final AprilTagFieldLayout tagLayout;
-
     // static {
     //   try {
     //     tagLayout =
@@ -71,8 +73,10 @@ public final class Constants {
     //     throw new RuntimeException(e);
     //   }
     // }
+  }
 
-      public static class VisionConstants {
+  public static class VisionConstants {
+
     public static final double singleTagStdDevsScaler = 5;
 
     public static final double ambiguityThreshold = 0.2;
@@ -108,7 +112,4 @@ public final class Constants {
             3,
             7);
   }
-  }
 }
-
-

@@ -10,15 +10,18 @@ import frc.lib.AdvancedSubsystem;
 
 public class GripperSubsystem extends AdvancedSubsystem {
   public GripperSubsystem() {}
+
   Servo gripperServo = new Servo(1);
 
-  public Command gripperCloseCommand(){
-    return run(()-> gripperServo.set(1)).withName("Closed");
+  public Command gripperCloseCommand() {
+    return run(() -> gripperServo.set(1)).withName("Closed");
   }
-  public Command gripperOpenCommand(){
-    return run(()-> gripperServo.set(0)).withName("Open");
+
+  public Command gripperOpenCommand() {
+    return run(() -> gripperServo.set(0)).withName("Open");
   }
-  public Command gripperServoStopCommand(){
-    return run(()-> gripperServo.set(0.5));
+
+  public Command gripperServoStopCommand() {
+    return run(() -> gripperServo.set(0.5));
   }
 }

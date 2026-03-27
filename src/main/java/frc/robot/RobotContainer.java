@@ -15,7 +15,7 @@ public class RobotContainer {
   // private final CommandXboxController m_driverController =
   // new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  private final CommandXboxController m_driverController = new CommandXboxController(0);
+  private final CommandXboxController m_driverController = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
 
   public RobotContainer() {
     // Set the default command for the drivetrain.
@@ -30,19 +30,31 @@ public class RobotContainer {
     // Reset Pose when Y is pressed
     m_TankBase.setDefaultCommand(
         m_TankBase.driveCommand(
-            () -> baseVelY.getAsDouble() * 0.5, () -> baseVelX.getAsDouble() * 0.5));
+            () -> baseVelX.getAsDouble() * -0.5, () -> baseVelY.getAsDouble() * 0.5));
 
+    
+    // m_driverController
+    //     .leftBumper()
+    //     .whileTrue(m_ArmSubsystem.armUpCommand())
+    //     .whileFalse(m_ArmSubsystem.armNeutralCommand());
     m_driverController
-        .rightBumper()
-        .onTrue(m_ArmSubsystem.armDownCommand())
-        .onFalse(m_ArmSubsystem.armUpCommand());
+        .b()
+        .onTrue(m_ArmSubsystem.armUpCommand());
     m_driverController
-        .leftBumper()
-        .onTrue(m_GripperSubsystem.gripperCloseCommand())
-        .onFalse(m_GripperSubsystem.gripperOpenCommand());
+        .y()
+        .whileTrue(m_ArmSubsystem.armDownCommand());
+    m_driverController
+        .a()
+        .whileTrue(m_GripperSubsystem.gripperCloseCommand())
+        .whileFalse(m_GripperSubsystem.gripperOpenCommand());
     m_driverController
         .axisGreaterThan(3, 0.5)
-        .onTrue(m_RollerSubsystem.rollerForwardCommand())
-        .onFalse(m_RollerSubsystem.rollerBackwardCommand());
+        .whileTrue(m_RollerSubsystem.rollerForwardCommand());
+    m_driverController
+        .axisGreaterThan(2, 0.5)
+        .whileTrue(m_RollerSubsystem.rollerBackwardCommand());
+    m_driverController
+        .x()
+        .whileTrue(m_RollerSubsystem.stopRollerCommand());
   }
 }

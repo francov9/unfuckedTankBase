@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -16,6 +17,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import static edu.wpi.first.units.Units.Hertz;
+import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Notifier;
@@ -24,13 +26,14 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.AdvancedSubsystem;
 import frc.robot.Robot;
 
 public class TankBase extends AdvancedSubsystem {
   private final CANBus rio = new CANBus("rio");
-  private final TalonFX lMotor = new TalonFX(1, rio);
-  private final TalonFX rMotor = new TalonFX(0, rio);
+  private final TalonFX lMotor = new TalonFX(6, rio);
+  private final TalonFX rMotor = new TalonFX(2, rio);
 
   // Use WPILib's DifferentialDrive for standard Arcade Drive math
   private final DifferentialDrive m_drive = new DifferentialDrive(lMotor::set, rMotor::set);
@@ -53,6 +56,58 @@ public class TankBase extends AdvancedSubsystem {
 
   // @Logged(name = "Pose")
   public Pose2d pose = new Pose2d();
+
+
+
+
+  // private final SysIdSwerveTranslation _translationCharacterization = new SysIdSwerveTranslation();
+  // private final SysIdSwerveSteerGains _steerCharacterization = new SysIdSwerveSteerGains();
+  // private final SysIdSwerveRotation _rotationCharacterization = new SysIdSwerveRotation();
+
+  // private final SysIdRoutine _translationRoutine =
+  //     new SysIdRoutine(
+  //         new SysIdRoutine.Config(
+  //             null, // Use default ramp rate (1 V/s)
+  //             Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
+  //             null, // Use default timeout (10 s)
+  //             // Log state with SignalLogger class
+  //             state -> SignalLogger.writeString("state", state.toString())),
+  //         new SysIdRoutine.Mechanism(
+  //             output -> setControl(_translationCharacterization.withVolts(output)), null, this));
+
+  // private final SysIdRoutine _steerRoutine =
+  //     new SysIdRoutine(
+  //         new SysIdRoutine.Config(
+  //             null, // Use default ramp rate (1 V/s)
+  //             Volts.of(7), // Use dynamic voltage of 7 V
+  //             null, // Use default timeout (10 s)
+  //             // Log state with SignalLogger class
+  //             state -> SignalLogger.writeString("state", state.toString())),
+  //         new SysIdRoutine.Mechanism(
+  //             volts -> setControl(_steerCharacterization.withVolts(volts)), null, this));
+
+  // private final SysIdRoutine _rotationRoutine =
+  //     new SysIdRoutine(
+  //         new SysIdRoutine.Config(
+  //             /* This is in radians per second², but SysId only supports "volts per second" */
+  //             Volts.of(Math.PI / 6).per(Second),
+  //             /* This is in radians per second, but SysId only supports "volts" */
+  //             Volts.of(Math.PI),
+  //             null, // Use default timeout (10 s)
+  //             // Log state with SignalLogger class
+  //             state -> SignalLogger.writeString("state", state.toString())),
+  //         new SysIdRoutine.Mechanism(
+  //             output -> {
+  //               // output is actually radians per second, but SysId only supports "volts"
+  //               setControl(_rotationCharacterization.withRotationalRate(output.in(Volts)));
+  //               // also log the requested output for SysId
+  //               SignalLogger.writeDouble("rotational_rate", output.in(Volts));
+  //             },
+  //             null,
+  //             this));
+
+
+
 
   // We ONLY need DifferentialDrivetrainSim. DCMotorSim only need for one motor sim
   private final DifferentialDrivetrainSim drivetrainSim =

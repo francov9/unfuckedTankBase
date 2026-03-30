@@ -4,7 +4,6 @@
 package frc.robot;
 
 import com.ctre.phoenix6.CANBus;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,11 +25,9 @@ import frc.robot.utils.VisionPoseEstimator.VisionPoseEstimatorConstants;
  */
 public final class Constants {
 
-
-    public static class rioCan {
-        public static CANBus rio = new CANBus("rio");
-    }
-    
+  public static class rioCan {
+    public static CANBus rio = new CANBus("rio");
+  }
 
   public static class OperatorConstants {
 

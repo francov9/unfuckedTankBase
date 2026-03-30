@@ -4,15 +4,14 @@
 
 package frc.robot.utils;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import java.util.function.BooleanSupplier;
 
 /** Displays SysId routines on SmartDashboard. */
 public class SysId {
-  public static boolean displayRoutines = false;
+  public static boolean displayRoutines = true;
 
   /**
    * Displays a single routine to SmartDashboard.

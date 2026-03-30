@@ -15,7 +15,8 @@ public class RobotContainer {
   // private final CommandXboxController m_driverController =
   // new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  private final CommandXboxController m_driverController = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_driverController =
+      new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
 
   public RobotContainer() {
     // Set the default command for the drivetrain.
@@ -32,29 +33,18 @@ public class RobotContainer {
         m_TankBase.driveCommand(
             () -> baseVelX.getAsDouble() * -0.5, () -> baseVelY.getAsDouble() * 0.5));
 
-    
     // m_driverController
     //     .leftBumper()
     //     .whileTrue(m_ArmSubsystem.armUpCommand())
     //     .whileFalse(m_ArmSubsystem.armNeutralCommand());
-    m_driverController
-        .b()
-        .onTrue(m_ArmSubsystem.armUpCommand());
-    m_driverController
-        .y()
-        .whileTrue(m_ArmSubsystem.armDownCommand());
+    m_driverController.b().onTrue(m_ArmSubsystem.armUpCommand());
+    m_driverController.y().whileTrue(m_ArmSubsystem.armDownCommand());
     m_driverController
         .a()
         .whileTrue(m_GripperSubsystem.gripperCloseCommand())
         .whileFalse(m_GripperSubsystem.gripperOpenCommand());
-    m_driverController
-        .axisGreaterThan(3, 0.5)
-        .whileTrue(m_RollerSubsystem.rollerForwardCommand());
-    m_driverController
-        .axisGreaterThan(2, 0.5)
-        .whileTrue(m_RollerSubsystem.rollerBackwardCommand());
-    m_driverController
-        .x()
-        .whileTrue(m_RollerSubsystem.stopRollerCommand());
+    m_driverController.axisGreaterThan(3, 0.5).whileTrue(m_RollerSubsystem.rollerForwardCommand());
+    m_driverController.axisGreaterThan(2, 0.5).whileTrue(m_RollerSubsystem.rollerBackwardCommand());
+    m_driverController.x().whileTrue(m_RollerSubsystem.stopRollerCommand());
   }
 }

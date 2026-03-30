@@ -33,23 +33,9 @@ public class ArmSubsystem extends AdvancedSubsystem {
   private StatusSignal<Angle> armPosition = armMotor.getPosition();
 
   private StatusSignal<AngularVelocity> armVelocity = armMotor.getVelocity();
-  private final VoltageOut _armVoltageSetter = new VoltageOut(0);
 
 
   private double currentPositionDeg;
-
-  private final SysIdRoutine rightTrack =
-      new SysIdRoutine(
-          new SysIdRoutine.Config(
-              Volts.per(Second).of(0.5),
-              Volts.of(4),
-              Seconds.of(5),
-              state -> SignalLogger.writeString("state", state.toString())),
-          new SysIdRoutine.Mechanism(
-              (Voltage volts) ->
-                  armMotor.setControl(_armVoltageSetter.withOutput(volts)),
-              null,
-              this));
 
   public ArmSubsystem() {
     var talonFXConfigs = new TalonFXConfiguration();
@@ -73,9 +59,8 @@ public class ArmSubsystem extends AdvancedSubsystem {
     armMotor.getConfigurator().apply(talonFXConfigs);
     // armPosition = armMotor.getPosition();
 
-    SysId.displayRoutine("Arm Flywheel", rightTrack);
   }
-
+  @Override
   public void periodic() {
     armPosition.refresh();
     // currentPositionDeg = armPosition.getValue().in(Units.Degrees);

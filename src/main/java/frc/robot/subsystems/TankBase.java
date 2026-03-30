@@ -3,8 +3,10 @@ package frc.robot.subsystems;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -15,8 +17,12 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Voltage;
+
 import static edu.wpi.first.units.Units.Hertz;
 import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Second;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -24,8 +30,10 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.AdvancedSubsystem;
 import frc.robot.Robot;
+import frc.robot.utils.SysId;
 
 public class TankBase extends AdvancedSubsystem {
   private final CANBus rio = new CANBus("rio");
@@ -53,6 +61,8 @@ public class TankBase extends AdvancedSubsystem {
 
   // @Logged(name = "Pose")
   public Pose2d pose = new Pose2d();
+
+  private final VoltageOut trackVoltageSetter = new VoltageOut(0);
 
   // private final SysIdSwerveTranslation _translationCharacterization = new
   // SysIdSwerveTranslation();
@@ -111,6 +121,18 @@ public class TankBase extends AdvancedSubsystem {
           kWheelRadiusMeters,
           null);
 
+    private final SysIdRoutine rightTrack = new SysIdRoutine(
+                new SysIdRoutine.Config(
+                        Volts.per(Second).of(0.5),
+                        Volts.of(1),
+                        Seconds.of(5),
+                        state -> SignalLogger.writeString("state", state.toString())),
+                new SysIdRoutine.Mechanism(
+                        (Voltage volts) ->
+                                rMotor.setControl(trackVoltageSetter.withOutput(volts)),
+                        null,
+                        this));;
+  
   public TankBase() {
     TalonFXConfiguration config = new TalonFXConfiguration();
 
@@ -141,7 +163,9 @@ public class TankBase extends AdvancedSubsystem {
       lMotor.setPosition(0);
       startSimThread();
     }
+    SysId.displayRoutine("RightTrack", rightTrack);
   }
+
 
   // Helper methods for math conversions
   private double rotationsToMeters(double rotations) {

@@ -64,53 +64,6 @@ public class TankBase extends AdvancedSubsystem {
 
   private final VoltageOut trackVoltageSetter = new VoltageOut(0);
 
-  // private final SysIdSwerveTranslation _translationCharacterization = new
-  // SysIdSwerveTranslation();
-  // private final SysIdSwerveSteerGains _steerCharacterization = new SysIdSwerveSteerGains();
-  // private final SysIdSwerveRotation _rotationCharacterization = new SysIdSwerveRotation();
-
-  // private final SysIdRoutine _translationRoutine =
-  //     new SysIdRoutine(
-  //         new SysIdRoutine.Config(
-  //             null, // Use default ramp rate (1 V/s)
-  //             Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
-  //             null, // Use default timeout (10 s)
-  //             // Log state with SignalLogger class
-  //             state -> SignalLogger.writeString("state", state.toString())),
-  //         new SysIdRoutine.Mechanism(
-  //             output -> setControl(_translationCharacterization.withVolts(output)), null, this));
-
-  // private final SysIdRoutine _steerRoutine =
-  //     new SysIdRoutine(
-  //         new SysIdRoutine.Config(
-  //             null, // Use default ramp rate (1 V/s)
-  //             Volts.of(7), // Use dynamic voltage of 7 V
-  //             null, // Use default timeout (10 s)
-  //             // Log state with SignalLogger class
-  //             state -> SignalLogger.writeString("state", state.toString())),
-  //         new SysIdRoutine.Mechanism(
-  //             volts -> setControl(_steerCharacterization.withVolts(volts)), null, this));
-
-  // private final SysIdRoutine _rotationRoutine =
-  //     new SysIdRoutine(
-  //         new SysIdRoutine.Config(
-  //             /* This is in radians per second², but SysId only supports "volts per second" */
-  //             Volts.of(Math.PI / 6).per(Second),
-  //             /* This is in radians per second, but SysId only supports "volts" */
-  //             Volts.of(Math.PI),
-  //             null, // Use default timeout (10 s)
-  //             // Log state with SignalLogger class
-  //             state -> SignalLogger.writeString("state", state.toString())),
-  //         new SysIdRoutine.Mechanism(
-  //             output -> {
-  //               // output is actually radians per second, but SysId only supports "volts"
-  //               setControl(_rotationCharacterization.withRotationalRate(output.in(Volts)));
-  //               // also log the requested output for SysId
-  //               SignalLogger.writeDouble("rotational_rate", output.in(Volts));
-  //             },
-  //             null,
-  //             this));
-
   // We ONLY need DifferentialDrivetrainSim. DCMotorSim only need for one motor sim
   private final DifferentialDrivetrainSim drivetrainSim =
       new DifferentialDrivetrainSim(
@@ -125,13 +78,24 @@ public class TankBase extends AdvancedSubsystem {
                 new SysIdRoutine.Config(
                         Volts.per(Second).of(0.5),
                         Volts.of(1),
-                        Seconds.of(5),
+                        Seconds.of(6),
                         state -> SignalLogger.writeString("state", state.toString())),
                 new SysIdRoutine.Mechanism(
                         (Voltage volts) ->
                                 rMotor.setControl(trackVoltageSetter.withOutput(volts)),
                         null,
-                        this));;
+                        this));
+    private final SysIdRoutine leftTrack = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    Volts.per(Second).of(0.5),
+                    Volts.of(1),
+                    Seconds.of(6),
+                    state -> SignalLogger.writeString("state", state.toString())),
+            new SysIdRoutine.Mechanism(
+                    (Voltage volts) ->
+                            rMotor.setControl(trackVoltageSetter.withOutput(volts)),
+                    null,
+                    this));
   
   public TankBase() {
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -164,6 +128,7 @@ public class TankBase extends AdvancedSubsystem {
       startSimThread();
     }
     SysId.displayRoutine("RightTrack", rightTrack);
+    SysId.displayRoutine("LeftTrack", leftTrack);
   }
 
 
